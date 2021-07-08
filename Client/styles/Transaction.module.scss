@@ -1,0 +1,247 @@
+@use "./mixins" as *;
+@use "./fonts" as *;
+
+.transactions {
+  // POSITIONING
+  margin-top: 5vh;
+  width: 100%;
+
+  th,
+  td {
+    padding: 1vw;
+  }
+
+  thead {
+    th {
+      text-align: left;
+      background-color: #01987a;
+      color: white;
+
+      &:first-child {
+        border-top-left-radius: 20px;
+      }
+      &:last-child {
+        border-top-right-radius: 20px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(odd) {
+        background-color: rgb(235, 255, 232);
+      }
+
+      &:last-child {
+        border-bottom: 2px solid #01987a;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #00000036;
+      }
+
+      td {
+        text-align: left;
+
+        &.category {
+          @include flex-center;
+
+          div {
+            @include flex-center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+
+            svg {
+              font-size: x-large;
+              color: white;
+            }
+          }
+        }
+
+        button {
+          border: none;
+          border-radius: 5px;
+          padding: 1vh 1vw;
+          box-shadow: rgb(97, 97, 97) 1px 1px 5px 1px;
+        }
+      }
+    }
+  }
+}
+
+.income {
+  color: rgb(37, 243, 116);
+}
+
+.expense {
+  color: rgb(250, 59, 59);
+}
+
+.pageLabel {
+  width: 100%;
+  text-align: center;
+  font-weight: 400;
+  margin-top: 3vh;
+}
+
+.pages {
+  @include flex-center;
+  gap: 10px;
+  padding: 0;
+  margin-top: 1vw;
+  list-style: none;
+
+  li {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+}
+
+.addButton {
+  @include flex-center;
+  position: absolute;
+  right: 7vw;
+  bottom: 10vh;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #01987a;
+  box-shadow: 2.5px 2.5px 15px -1px #014739;
+  transition: background-color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #02866c;
+
+    a {
+      font-size: 3rem;
+      transition: font-size 0.1s;
+    }
+  }
+
+  a {
+    color: white !important;
+    font-size: 2.5rem;
+    font-style: none;
+    text-decoration: none;
+  }
+}
+
+.newTransact {
+  @include flex-center;
+  margin-top: 8vh;
+
+  .newTransactCard {
+    .newTransactHeader {
+      margin-bottom: 5vh;
+      font-size: xx-large;
+      color: #07b995;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    .formWrapper {
+      border: none !important;
+      padding: 2vh 2vw;
+      box-shadow: #5cd6be 2px 2px 10px -2px;
+      border-radius: 10px;
+
+      .newTransactForm {
+        .newTransactGroup {
+          margin: 1vh 0;
+
+          .newTransactLabel {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 500;
+            font-size: 1.3rem;
+            color: rgb(128, 128, 128);
+          }
+
+          .newTransactInput {
+            border-radius: 20px;
+            padding: 1vh 1vw;
+            box-shadow: #01987a 2px 2px 10px -3px;
+          }
+
+          .addCateg {
+            margin-left: 15px;
+            opacity: 0.7;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .buttonWrapper {
+          text-align: right;
+          padding: 1vh 1vw;
+
+          .newTransactButton {
+            margin-top: 2vh;
+            padding: 1vh 0.8vw;
+            border: none;
+            border-radius: 10px;
+            background-color: #07b995;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.3rem;
+            font-weight: 550;
+            letter-spacing: 1.2px;
+
+            &:hover {
+              background-color: #01987a;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.transaction {
+  width: 100%;
+  height: 100%;
+
+  .details {
+    .category {
+      @include flex-center;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+
+      svg {
+        width: 50%;
+        height: 50%;
+        color: white;
+      }
+    }
+  }
+
+  .buttons {
+    position: absolute;
+    bottom: 10vh;
+    width: 90%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0 10vw;
+
+    .button {
+      border: none;
+      border-radius: 5px;
+      padding: 1vh 1vw;
+      box-shadow: rgb(97, 97, 97) 1px 1px 5px 1px;
+    }
+  }
+}

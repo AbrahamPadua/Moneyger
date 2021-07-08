@@ -1,0 +1,103 @@
+@use "./fonts" as *;
+@use "./mixins" as *;
+
+.loginPage {
+  @include flex-center;
+  background: url("/images/bg.png") no-repeat;
+  background-size: auto;
+  width: 100vw;
+  height: 100vh;
+
+  .login {
+    display: flex;
+    background-color: aquamarine;
+    padding: 0;
+    border-radius: 10px;
+    min-width: 50%;
+    height: 60%;
+
+    .loginFormWrapper {
+      width: 50%;
+      padding: 4vh 3vw;
+
+      .loginHeader {
+        color: rgb(61, 61, 61);
+        font-size: 2rem;
+
+        .m {
+          position: relative;
+          top: 10px;
+          left: 5px;
+          display: inline-block;
+          background-image: url("/images/logo.png");
+          background-position: center;
+          background-size: cover;
+          min-width: 50px;
+          min-height: 50px;
+        }
+      }
+
+      .loginForm {
+        @include flex-center;
+        flex-flow: column nowrap;
+
+        .loginFooter {
+          @include flex-center;
+          position: relative;
+          top: 6vh;
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .page {
+    background-color: #fff;
+    width: 50%;
+    padding-left: 2px;
+  }
+
+  .loginGroup {
+    width: 100%;
+    margin-top: 4vh;
+
+    &:nth-of-type(2) {
+      margin-top: 0;
+    }
+
+    .loginLabel {
+      position: relative;
+      top: -35px;
+      left: 14px;
+      color: rgb(102, 101, 101);
+      font-family: "Quicksand";
+      font-size: 1.35rem;
+      transition: all 0.3s linear;
+    }
+
+    .loginInput:valid + .loginLabel,
+    .loginInput:focus + .loginLabel {
+      top: -65px;
+      left: 2px;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.loginButton {
+  width: 80%;
+  border-radius: 5px;
+  margin: 1vh 0;
+  margin-top: 2vh;
+}
+
+.googleButton {
+  @include flex-center;
+  width: 80%;
+  margin: 1vh 0;
+  margin-top: 0;
+  border-radius: 5px !important;
+}

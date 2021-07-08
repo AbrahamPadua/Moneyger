@@ -1,0 +1,29 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 8080",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "bootstrap": "^5.0.1",
+    "chart.js": "2.9.3",
+    "moment": "^2.29.1",
+    "next": "10.x",
+    "react": "17.x",
+    "react-bootstrap": "^1.6.1",
+    "react-chartjs-2": "2.11.1",
+    "react-dom": "17.x",
+    "react-google-login": "^5.2.2",
+    "sass": "^1.35.1",
+    "sweetalert2": "^11.0.16"
+  },
+  "devDependencies": {
+    "scss": "^0.2.4"
+  }
+}
