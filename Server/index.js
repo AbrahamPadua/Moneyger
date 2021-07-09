@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import schema from "./schema/schema";
 import resolvers from "./schema/resolvers";
 import { graphqlHTTP } from "express-graphql";
+// import { loggingMiddleware } from "./middlewares/auth"
 
 // CONSTANTS
 const app = express();
@@ -45,6 +46,7 @@ app.get("/", (req, res) => {
 
 // app.use("/api/users", userRoutes);
 
+// app.use(loggingMiddleware)
 app.use(
   "/graphql",
   graphqlHTTP({ schema, rootValue: resolvers, graphiql: true })

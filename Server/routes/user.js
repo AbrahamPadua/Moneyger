@@ -1,7 +1,6 @@
 import { Router } from "express";
 import * as UserController from "../controllers/user";
-import { decode, verify } from "../controllers/auth";
-import { auth } from "google-auth-library";
+import { verify } from "../controllers/auth";
 
 const router = Router();
 
