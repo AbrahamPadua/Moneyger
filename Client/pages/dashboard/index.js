@@ -6,7 +6,6 @@ import auth from "../../providers/authProvider";
 import _ from "lodash";
 // COMPONENTS
 import Dashboard from "../../components/Dashboard/Dashboard";
-import Pixel from "../../components/Dashboard/Pixel";
 import Transactions from "../../components/Dashboard/Transactions";
 import Weekdays from "../../components/Dashboard/Weekdays";
 // STYLING
@@ -15,7 +14,7 @@ import DashboardTitle from "../../components/Dashboard/DashboardTitle";
 // CONTEXTS
 import { DashData } from "../../Contexts";
 import client from "../../graphql/client";
-import LOAD_USERS from "../../graphql/Queries";
+import { quoteQuery } from "../../graphql/queries";
 
 const index = ({ quote }) => {
   const [pixels, setPixels] = useState([[], [], [], [], [], [], []]);
@@ -66,7 +65,7 @@ const index = ({ quote }) => {
 };
 
 export const getServerSideProps = async () => {
-  const { loading, error, data } = await client.query({ query: LOAD_USERS })
+  const { loading, error, data } = await client.query({ query: quoteQuery })
   if (error) {
     console.log(error)
     return { props: { quote: null } }

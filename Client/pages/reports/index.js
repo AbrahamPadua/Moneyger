@@ -1,7 +1,7 @@
 // FUNCTIONS
 import { useEffect, useState } from "react";
-import transactionProvider from "../../auth/transactionProvider";
-import categoryProvider from "../../auth/categoryProvider";
+import transactionProvider from "../../providers/transactionProvider";
+import categoryProvider from "../../providers/categoryProvider";
 import moment from "moment";
 // COMPONENTS
 import { Form, Col } from "react-bootstrap";
@@ -9,7 +9,7 @@ import { Pie } from "react-chartjs-2";
 import Dashboard from "../../components/Dashboard/Dashboard";
 // STYLING
 import Styles from "../../styles/Report.module.scss";
-import auth from "../../auth/authProvider";
+import auth from "../../providers/authProvider";
 
 const CategoryBreakdown = () => {
   const [pieIncome, setPieIncome] = useState("");

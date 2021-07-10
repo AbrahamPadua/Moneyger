@@ -90,7 +90,7 @@ const authProvider = {
     if (res.status < 400) {
       const { data } = await res.json();
       JWTStorage.setToken(data.accessToken, data.tokenExpiry);
-      global.window && localStorage.setItem("loggedIn", true);
+      if (window !== undefined) localStorage.setItem("uid", data.userId);
       Router.push("/dashboard");
     } else {
       Swal.fire("Login Failed", await res.text(), "error");
@@ -111,7 +111,7 @@ const authProvider = {
     if (res.status < 400) {
       const { data } = await res.json();
       JWTStorage.setToken(data.accessToken, data.tokenExpiry);
-      global.window && localStorage.setItem("loggedIn", true);
+      global.window && localStorage.setItem("uid", data.userId);
       Router.push("/dashboard");
       return;
     } else {
@@ -123,7 +123,7 @@ const authProvider = {
     if (!Boolean(JWTStorage.getToken())) {
       return (
         // Again, this is just a workaround to just load on the browser.
-        global.window && localStorage.getItem("loggedIn")
+        global.window && Boolean(localStorage.getItem("uid"))
       );
     }
     return true;
@@ -143,7 +143,7 @@ const authProvider = {
       JSONPOST({}, { credentials: "include" })
     );
     JWTStorage.eraseToken();
-    global.window && localStorage.removeItem("loggedIn");
+    if (window !== undefined) localStorage.removeItem("uid")
     return Promise.resolve();
   },
 

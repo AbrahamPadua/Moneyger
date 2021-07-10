@@ -1,5 +1,5 @@
 import { useState } from "react";
-import auth from "../../auth/authProvider";
+import auth from "../../providers/authProvider";
 
 // Components
 import { Form, Button } from "react-bootstrap";

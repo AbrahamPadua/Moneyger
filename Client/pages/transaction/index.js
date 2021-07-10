@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Router from "next/router";
-import auth from "../../auth/authProvider";
-import transactionProvider from "../../auth/transactionProvider";
-import categoryProvider from "../../auth/categoryProvider";
+import auth from "../../providers/authProvider";
+import transactionProvider from "../../providers/transactionProvider";
+import categoryProvider from "../../providers/categoryProvider";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import Styles from "../../styles/Transaction.module.scss";
 import Link from "next/link";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const index = () => {
   const [transaction, setTransaction] = useState({});
@@ -44,7 +44,7 @@ const index = () => {
           </div>
           <div>
             <h2>Date:</h2>
-            {transaction.current ? moment(transaction.current.dateAdded).format("MMMM DD, YYYY") : ""}
+            {transaction.current ? dayjs(transaction.current.dateAdded).format("MMMM DD, YYYY") : ""}
           </div>
           <div>
             <h2>Amount:</h2>

@@ -1,7 +1,7 @@
 // FUNCTIONS
 import { useState, useEffect } from "react";
 import { inputHandler } from "../../app-helper";
-import auth from "../../auth/authProvider";
+import auth from "../../providers]/authProvider";
 import categoryProvider from "../../auth/categoryProvider";
 // COMPONENTS
 import { Form, Button, Row, Col, Card } from "react-bootstrap";

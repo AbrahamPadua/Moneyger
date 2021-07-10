@@ -3,12 +3,13 @@ import NavBar from "./NavBar";
 import Styles from "../styles/Home.module.scss";
 import { useState, useEffect } from "react";
 import Router from "next/router";
-import auth from "../auth/authProvider";
+import auth from "../providers/authProvider";
 
 const View = ({ title, children }) => {
-  const [showNav, setShowNav] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false)
 
   useEffect(() => {
+    setHasMounted(true)
     // Hide the navbar if the user is in dashboard
     const showNavRoutes = { login: "login", register: "register", "": "home" };
     if (auth.isLoggedIn() && Router.route.slice(1) in showNavRoutes) {
@@ -16,6 +17,9 @@ const View = ({ title, children }) => {
       Router.push("/dashboard");
     }
   }, []);
+
+  if (!hasMounted) return null;
+
   return (
     <>
       <Head>
@@ -26,7 +30,7 @@ const View = ({ title, children }) => {
           content="initial-scale=1.0,width=device-width"
         />
       </Head>
-      {showNav ? <NavBar /> : <></>}
+      <NavBar />
       <div>{children}</div>
     </>
   );

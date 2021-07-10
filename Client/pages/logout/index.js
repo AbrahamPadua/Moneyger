@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Router from "next/router";
-import auth from "../../auth/authProvider";
+import auth from "../../providers/authProvider";
 
 const Logout = () => {
   useEffect(async () => {

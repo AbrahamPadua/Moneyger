@@ -11,13 +11,18 @@ const transactionResolver = {
   },
   getTransactions: async ({ userId }) => {
     const user = await User.findById(userId);
-    console.log(user.transactions)
+
     return user.transactions;
   },
   addTransaction: async ({ userId, input }) => {
     try {
       const user = await User.findById(userId);
+      if (input.category.type === "Income")
+        input.balanceAfterTransaction = user.currentBalance + input.amount;
+      if (input.category.type === "Expense")
+        input.balanceAfterTransaction = user.currentBalance - input.amount;
       user.transactions.push(input);
+      user.currentBalance = input.balanceAfterTransaction;
       await user.save();
       return true;
     } catch (err) {
@@ -44,7 +49,9 @@ const transactionResolver = {
   deleteTransaction: async ({ userId, transactionId }) => {
     try {
       const user = await User.findById(userId);
-      const newTrans = user.transactions.filter((T) => `${T._id}` !== transactionId);
+      const newTrans = user.transactions.filter(
+        (T) => `${T._id}` !== transactionId
+      );
       if (newTrans.length === user.transactions.length) return false;
       user.transactions = newTrans;
       await user.save();

@@ -2,10 +2,6 @@ import category from "./category";
 
 const transaction = {
   category,
-  type: {
-    type: String,
-    required: [true, "Transaction Type is required."],
-  },
   amount: {
     type: Number,
     required: [true, "Transaction amount is required."],

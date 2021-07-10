@@ -1,10 +1,9 @@
 // FUNCTIONS
 import { useEffect, useState } from "react";
-import moment from "moment";
-import transactionProvider from "../../auth/transactionProvider";
-import categoryProvider from "../../auth/categoryProvider";
-import auth from "../../auth/authProvider";
-import Router from "next/router";
+import dayjs from "dayjs";
+import transactionProvider from "../../providers/transactionProvider";
+import categoryProvider from "../../providers/categoryProvider";
+import auth from "../../providers/authProvider";
 import _ from "lodash";
 // COMPONENTS
 import Link from "next/link";
@@ -97,18 +96,20 @@ const Transactions = () => {
       <ul className={Styles.pages}>
         {maxPage > 1 ? (
           <>
-            {nPage > 1
-              ? <button onClick={() => setNPage(nPage - 1)}>&lt;</button>
-              : <button disabled>&lt;</button>
-            }
+            {nPage > 1 ? (
+              <button onClick={() => setNPage(nPage - 1)}>&lt;</button>
+            ) : (
+              <button disabled>&lt;</button>
+            )}
             <li onClick={() => setNPage(1)}>{nPage}</li>
             <li onClick={() => setNPage(2)}>{nPage + 1}</li>
             <li onClick={() => setNPage(3)}>{nPage + 2}</li>
             <li onClick={() => console.log(maxPage, nPage)}>Log</li>
-            {nPage === maxPage
-              ? <button disabled>&gt;</button>
-              : <button onClick={() => setNPage(nPage + 1)}>&gt;</button>
-            }
+            {nPage === maxPage ? (
+              <button disabled>&gt;</button>
+            ) : (
+              <button onClick={() => setNPage(nPage + 1)}>&gt;</button>
+            )}
           </>
         ) : (
           <li>{nPage}</li>
@@ -128,40 +129,31 @@ const Transactions = () => {
 const RecordsView = ({
   amount,
   description,
-  categoryName,
+  category,
   type,
   dateAdded: date,
   _id: id,
   balanceAfterTransaction,
-  categories,
 }) => {
-  const category = categories.find(
-    (category) => category.name === categoryName
-  );
-
   return (
     <>
       <tr>
         <td className={Styles.category}>
-          {categories.length ? (
-            <div style={{ backgroundColor: category.iconColor }}>
-              <FontAwesomeIcon
-                icon={["fas", category.icon]}
-                className={Styles.icon}
-              />
-            </div>
-          ) : (
-            categoryName
-          )}
+          <div style={{ backgroundColor: category.icon.color }}>
+            <FontAwesomeIcon
+              icon={["fas", category.icon.name]}
+              className={Styles.icon}
+            />
+          </div>
         </td>
-        {type.match(/expense/i) ? (
+        {category.type.match(/expense/i) ? (
           <td className={Styles.expense}> -₱{amount} </td>
         ) : (
           <td className={Styles.income}>+₱{amount}</td>
         )}
         <td>{description}</td>
         <td>₱{balanceAfterTransaction}</td>
-        <td>{moment(date).format("L")}</td>
+        <td>{dayjs(date).format("MM/DD/YY")}</td>
         <td>
           <a href={`/transaction/?id=${id}`}>
             <button type="button">View</button>

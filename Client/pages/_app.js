@@ -1,8 +1,8 @@
-// FUNCTIONS
-import { useEffect } from "react";
-import auth from "../auth/authProvider";
 // COMPONENTS
 import View from "../components/View";
+// APOLLO CLIENT
+import { ApolloProvider } from "@apollo/client"
+import client from "../graphql/client";
 // STYLING
 import "../styles/globals.scss";
 import "bootstrap/scss/bootstrap.scss";
@@ -12,14 +12,11 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 
 function MyApp({ Component, pageProps }) {
-  // useEffect(async () => {
-  //   auth.checkAuth();
-  // }, []);
   return (
-    <>
+    <ApolloProvider client={client}>
       <View title="Budget Tracker App"></View>;
       <Component {...pageProps} />
-    </>
+    </ApolloProvider>
   );
 }
 

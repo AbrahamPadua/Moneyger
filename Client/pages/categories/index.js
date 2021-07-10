@@ -1,7 +1,7 @@
 // FUNCTIONS
 import { useEffect, useState } from "react";
-import categoryProvider from "../../auth/categoryProvider";
-import auth from "../../auth/authProvider";
+import categoryProvider from "../../providers/categoryProvider";
+import auth from "../../providers/authProvider";
 // COMPONENTS
 import Link from "next/link";
 import { Table } from "react-bootstrap";

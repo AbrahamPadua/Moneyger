@@ -1,6 +1,6 @@
 // Functions
 import { useState } from "react";
-import auth from "../../auth/authProvider";
+import auth from "../../providers/authProvider";
 import { inputHandler } from "../../app-helper";
 // Components
 import Link from "next/link";

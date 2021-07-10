@@ -1,4 +1,6 @@
+import client from "../graphql/client"
 import { API, JSONPOSTAUTH } from "../app-helper";
+import { addT } from "../graphql/mutations";
 
 const transactionProvider = {
   getTransactions: async () => {
@@ -17,6 +19,10 @@ const transactionProvider = {
     return res.status < 400 ? data.data : null
   },
   createTransaction: async (transaction) => {
+    const [addTransaction, data] = await client.mutate({
+      mutation: addT,
+      variables: { uid: localStorage.getItem("uid"), input: transaction }
+    })
     const res = await fetch(
       `${API}/api/users/add-transaction`,
       JSONPOSTAUTH(transaction)

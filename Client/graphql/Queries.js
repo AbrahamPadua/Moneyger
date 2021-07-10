@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-export const LOAD_USERS = gql`
+export const quoteQuery = gql`
   query {
     getQuote {
       author
@@ -9,4 +9,24 @@ export const LOAD_USERS = gql`
   }
 `
 
-export default LOAD_USERS
+export const TsQuery = gql`
+  query getTransactions ($userId: ID!) {
+    getTransactions (userId: $userId) {
+      transactions {
+        amount
+        description
+        dateAdded
+        balanceAfterTransaction
+        category {
+          name
+          icon {
+            name
+            color
+          }
+        }
+      }
+    }
+  }
+`;
+
+// export const

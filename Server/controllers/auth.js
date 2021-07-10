@@ -89,8 +89,8 @@ export const forAdminsOnly = [
       user.isAdmin
         ? next()
         : res
-            .status(403)
-            .json({ message: `You must be an admin to access this page.` });
+          .status(403)
+          .json({ message: `You must be an admin to access this page.` });
     } catch (err) {
       console.log(err);
       res.status(400).send(`Something went wrong`);

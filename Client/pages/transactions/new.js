@@ -1,10 +1,10 @@
 // FUNCTIONS
 import Router from "next/router";
-import auth from "../../auth/authProvider";
+import auth from "../../providers/authProvider";
 import { useEffect, useState } from "react";
 import { inputHandler } from "../../app-helper";
-import categoryProvider from "../../auth/categoryProvider";
-import transactionProvider from "../../auth/transactionProvider";
+import categoryProvider from "../../providers/categoryProvider";
+import transactionProvider from "../../providers/transactionProvider";
 import Swal from "sweetalert2";
 // COMPONENTS
 import Link from "next/link";
@@ -12,6 +12,8 @@ import { Form, Row, Col, Card } from "react-bootstrap";
 import Dashboard from "../../components/Dashboard/Dashboard";
 // STYLES
 import Styles from "../../styles/Transaction.module.scss";
+import { useMutation } from "@apollo/client";
+import { addT } from "../../graphql/mutations";
 
 const NewTransaction = () => {
   return (
@@ -31,62 +33,70 @@ const NewTransaction = () => {
 };
 
 const NewTransactionForm = () => {
-  const [newTransaction, setNewTransaction] = useState({
-    categoryName: "",
+  const [newT, setNewT] = useState({
+    category: "",
     type: "",
     amount: 0,
     description: "",
   });
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCs, setAllCs] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [addTransaction, { data }] = useMutation(addT)
 
   // Retrieving all categories
   useEffect(async () => {
     await auth.checkAuth();
-    const categories = await categoryProvider.getCategories();
-    if (!categories instanceof Array) return;
-    setAllCategories(categories);
+    const categs = await categoryProvider.getCategories();
+    if (!categs instanceof Array) return;
+    setAllCs(categs);
   }, []);
 
   useEffect(() => {
     handleType({ target: { value: "Income", name: "type" } });
-  }, [allCategories]);
+  }, [allCs]);
 
   const handleType = (e) => {
-    inputHandler(e, newTransaction, setNewTransaction);
-    if (!allCategories) return;
+    inputHandler(e, newT, setNewT);
+    if (!allCs) return;
 
     const type = e.target.value;
-    let filteredCategories = allCategories
-      .filter((category) => category.type.toLowerCase() === type.toLowerCase())
-      .map((category) => {
+    let filteredCs = allCs
+      .filter((categ) => categ.type.toLowerCase() === type.toLowerCase())
+      .map((categ) => {
         return (
-          <option key={category["_id"]} value={category.name}>
-            {category.name}
+          <option key={categ["_id"]} value={categ.name}>
+            {categ.name}
           </option>
         );
       });
-    setCategories(filteredCategories);
+    setCategories(filteredCs);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Amount Validation
-    if (newTransaction.amount < 0)
+    if (newT.amount < 0)
       return Swal.fire({
         icon: "error", title: "Invalid Amount", text: "Please provide a positive amount.",
       });
 
     // Checking empty fields
-    for (let x of Object.keys(newTransaction)) {
-      if (!newTransaction[x] && x !== "description")
+    for (let x of Object.keys(newT)) {
+      if (!newT[x] && x !== "description")
         return Swal.fire(`Unfilled Field`, `${x} is required`, "error");
     }
 
-    const error = await transactionProvider.createTransaction(newTransaction);
-    if (error)
-      Swal.fire(["Something Went Wrong", "Please try again...", "error"])
+    // const error = await transactionProvider.createTransaction(newT);
+    newT.category = allCs.find(categ => categ.name === newT.category)
+    delete newT.category._id
+    delete newT.type
+    newT.amount = +newT.amount
+    const res = await addTransaction({ variables: { uid: localStorage.getItem("uid"), input: newT } })
+    console.log(res)
+
+    // if (error)
+    //   Swal.fire(["Something Went Wrong", "Please try again...", "error"])
     Router.push("/transactions");
   };
 
@@ -108,12 +118,12 @@ const NewTransactionForm = () => {
           <option value="Expense">Expense</option>
         </Form.Control>
       </Form.Group>
-      <Form.Group controlId="categoryName" className={Styles.newTransactGroup}>
+      <Form.Group controlId="category" className={Styles.newTransactGroup}>
         <Form.Label className={Styles.newTransactLabel}>Category:</Form.Label>
         <Form.Control
           as="select"
-          name="categoryName"
-          onChange={(e) => inputHandler(e, newTransaction, setNewTransaction)}
+          name="category"
+          onChange={(e) => inputHandler(e, newT, setNewT)}
           defaultValue="default"
           className={Styles.newTransactInput}
           required
@@ -132,7 +142,7 @@ const NewTransactionForm = () => {
         <Form.Control
           type="number"
           name="amount"
-          onChange={(e) => inputHandler(e, newTransaction, setNewTransaction)}
+          onChange={(e) => inputHandler(e, newT, setNewT)}
           placeholder="Enter amount"
           className={Styles.newTransactInput}
           required
@@ -145,7 +155,7 @@ const NewTransactionForm = () => {
         <Form.Control
           type="text"
           name="description"
-          onChange={(e) => inputHandler(e, newTransaction, setNewTransaction)}
+          onChange={(e) => inputHandler(e, newT, setNewT)}
           placeholder="Enter description"
           className={Styles.newTransactInput}
           required

@@ -59,8 +59,8 @@ const schema = buildSchema(`
   }
 
   enum CategoryType {
-    INCOME
-    EXPENSE
+    Income
+    Expense
   }
 
   input CategoryInput {

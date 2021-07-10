@@ -4,9 +4,13 @@ import { API } from "../app-helper"
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
+    console.log(graphqlErrors)
     graphqlErrors.map(({ message, location, path }) => {
       alert(`Graphql Error ${message}.`)
     })
+  }
+  if (networkError) {
+    console.log(networkError)
   }
 })
 

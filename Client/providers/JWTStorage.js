@@ -71,7 +71,7 @@ const JWTStorageManager = () => {
   };
 
   const handleReload = async () => {
-    const loggedIn = global.window && localStorage.getItem("loggedIn");
+    const loggedIn = global.window && localStorage.getItem("uid");
     if (loggedIn && !getToken()) {
       abortRefreshToken();
       await getRefreshedToken();

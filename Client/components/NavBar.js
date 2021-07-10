@@ -1,7 +1,7 @@
 import { Navbar } from "react-bootstrap";
 import Link from "next/link";
 import Image from "next/image";
-import auth from "../auth/authProvider";
+import auth from "../providers/authProvider";
 import { useEffect, useState } from "react";
 import Styles from "../styles/Nav.module.scss";
 import Router from "next/router";
