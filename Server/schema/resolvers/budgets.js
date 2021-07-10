@@ -4,7 +4,7 @@ const budgetResolver = {
   getBudget: async ({ userId, budgetId }) => {
     const user = await User.findById(userId)
     for (let budget of user.budgets) {
-      if (budget._id === budgetId) return budget
+      if (`${budget._id}` === budgetId) return budget
     }
     return false;
   },
@@ -27,7 +27,7 @@ const budgetResolver = {
     try {
       const user = await User.findById(userId)
       for (let budget of user.budgets) {
-        if (budget._id === budgetId) {
+        if (`${budget._id}` === budgetId) {
           budget = { ...budget, ...input }
           await user.save()
           return true
@@ -42,7 +42,7 @@ const budgetResolver = {
   delBudget: async ({ userId, budgetId }) => {
     try {
       const user = await User.findById(userId)
-      newBudget = user.budgets.filter(B => B._id !== budgetId)
+      newBudget = user.budgets.filter(B => `${B._id}` !== budgetId)
       if (newBudget.length === user.budgets.length) return false
       user.budgets = newBudget
       await user.save()

@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
   res.send("Server is online");
 });
 
-// app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 // app.use(loggingMiddleware)
 app.use(

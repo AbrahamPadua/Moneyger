@@ -5,7 +5,7 @@ const categoryResolver = {
     try {
       const user = await User.findById(userId);
       if (user) {
-        categ = user.categories.find((C) => C._id === categoryId);
+        categ = user.categories.find((C) => `${C._id}` === categoryId);
         return categ;
       } else {
         return null;
@@ -48,7 +48,7 @@ const categoryResolver = {
     try {
       const user = User.findById(userId);
       for (let categ of user.categories) {
-        if (categ._id === categoryId) {
+        if (`${categ._id}` === categoryId) {
           categ = { ...categ, ...input };
           await user.save();
           return true;
@@ -64,7 +64,7 @@ const categoryResolver = {
   delCategory: async ({ userId, categoryId }) => {
     try {
       const user = await User.findById(userId);
-      const newCategs = user.categories.filter((C) => C._id !== categoryId);
+      const newCategs = user.categories.filter((C) => `${C._id}` !== categoryId);
       if (newCategs.length === user.categories.length) return false
       user.categories = newCategs
       await user.save()

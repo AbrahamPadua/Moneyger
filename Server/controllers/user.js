@@ -105,9 +105,8 @@ export const login = async ({ email, password, loginType, ...data }, res) => {
     if (loginType === "form") {
       // Step 2
       email = email.toLowerCase()
-      if (await emailExists(email)) {
-        let user = await User.findOne({ email });
-
+      const user = await emailExists(email)
+      if (user) {
         // Verify Password
         let matched = compareSync(password, user.password);
         if (matched) {
@@ -119,8 +118,6 @@ export const login = async ({ email, password, loginType, ...data }, res) => {
           // log.save();
 
           const refresh_token = createRefreshToken(user);
-          console.log(`Refresh Token:`);
-          console.log(refresh_token);
           process.env.MODE == "DEVELOPMENT"
             ? res.cookie("jid", refresh_token, {
               sameSite: "lax",
@@ -130,12 +127,14 @@ export const login = async ({ email, password, loginType, ...data }, res) => {
               sameSite: "none",
               secure: true,
             });
+          console.log(user)
 
           return [
             true,
             {
               accessToken: createAccessToken(user.toObject()),
               tokenExpiry,
+              userId: user._id
             },
           ];
         } else {
@@ -313,6 +312,7 @@ export const verifyGoogleToken = async ({ tokenId }, res) => {
               {
                 accessToken: createAccessToken(user.toObject()),
                 tokenExpiry,
+                userId: user._id
               },
               user,
             ],
@@ -331,12 +331,14 @@ export const verifyGoogleToken = async ({ tokenId }, res) => {
           loginType: "google",
         });
         await newUser.save();
+        const theUser = await User.find(U => U.email === newUser.email)
         return [
           true,
           [
             {
               accessToken: createAccessToken(newUser.toObject()),
               tokenExpiry,
+              userId: theUser._id
             },
             newUser,
           ],
