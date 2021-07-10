@@ -46,13 +46,15 @@ const user = mongoose.Schema({
           required: [true, "Category type is required."],
         },
         icon: {
-          type: String,
-          required: [true, "Icon name is required"],
-        },
-        iconColor: {
-          type: String,
-          required: [true, "Icon color is required"],
-        },
+          name: {
+            type: String,
+            required: [true, "Icon name is required"],
+          },
+          color: {
+            type: String,
+            required: [true, "Icon color is required"],
+          },
+        }
       },
     ],
     default: defaultCateg,

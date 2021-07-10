@@ -4,8 +4,8 @@ const transactionResolver = {
   getTransaction: async ({ userId, transactionId }) => {
     const user = await User.findById(userId);
     for (let transaction of user.transactions) {
-      console.log(transaction);
-      if (transaction["_id"] === transactionId) return transaction;
+      // GRAPHQL ID IS STRING DATA TYPE
+      if (`${transaction._id}` === transactionId) return transaction;
     }
     return false;
   },
@@ -28,7 +28,7 @@ const transactionResolver = {
     try {
       const user = await User.findById(userId);
       for (let transaction of user.transactions) {
-        if (transaction._id === transactionId) {
+        if (`${transaction._id}` === transactionId) {
           transaction = { ...transaction, ...input };
           await user.save();
           return true;
@@ -43,7 +43,7 @@ const transactionResolver = {
   deleteTransaction: async ({ userId, transactionId }) => {
     try {
       const user = await User.findById(userId);
-      const newTrans = user.transactions.filter((T) => T._id !== transactionId);
+      const newTrans = user.transactions.filter((T) => `${T._id}` !== transactionId);
       if (newTrans.length === user.transactions.length) return false;
       user.transactions = newTrans;
       await user.save();

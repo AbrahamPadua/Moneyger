@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 // app.use(loggingMiddleware)
 app.use(
   "/graphql",
-  authenticate,
+  // authenticate,
   graphqlHTTP({ schema, rootValue: resolvers, graphiql: process.env.MODE === "DEVELOPMENT" })
 );
 

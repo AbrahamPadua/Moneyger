@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import fetch from "node-fetch";
 import Quote from "../../models/quote";
 
 const quoteResolver = {
@@ -8,8 +10,8 @@ const quoteResolver = {
     try {
       // CHECK IF THERE IS NO QUOTE OF THE DAY IN THE DATABASE
       // OR IF IT'S DATE IS NOT VALID
-      if (!quotes.length || !moment(today).isSame(quotes[0].date, "day")) {
-        if (quotes.length) await Quote.findByIdAndDelete(quotes[0]._id)
+      if (!quotes.length || !dayjs(today).isSame(quotes[0].date, "day")) {
+        if (quotes.length) await Quote.findByIdAndDelete(quotes[0]._id);
         const res = await fetch(
           `http://quotes.rest/qod.json?category=management`
         );
@@ -23,10 +25,10 @@ const quoteResolver = {
         return quotes[0];
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return null;
     }
-  }
-}
+  },
+};
 
-export default quoteResolver
+export default quoteResolver;

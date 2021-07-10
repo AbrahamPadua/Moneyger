@@ -4,6 +4,7 @@ import categoryResolver from "./resolvers/categories"
 import transactionResolver from "./resolvers/transaction"
 import budgetResolver from "./resolvers/budgets";
 import goalResolver from "./resolvers/goals";
+import quoteResolver from "./resolvers/quote";
 
 const resolvers = {
   ...loggedInResolver,
@@ -11,7 +12,8 @@ const resolvers = {
   ...categoryResolver,
   ...transactionResolver,
   ...budgetResolver,
-  ...goalResolver
+  ...goalResolver,
+  ...quoteResolver
 };
 
 export default resolvers;

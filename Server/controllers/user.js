@@ -8,7 +8,7 @@ import {
 import { OAuth2Client } from "google-auth-library";
 // UTILITIES
 import fetch from "node-fetch";
-import moment from "moment";
+import dayjs from "dayjs";
 import { hashSync, compareSync } from "bcrypt";
 // MODELS
 import User from "../models/user";
@@ -267,8 +267,8 @@ export const getBreakdownByRange = async (
   });
   const transactions = user.transactions.forEach(({ dateAdded }) => {
     return (
-      moment(dateAdded).isSameOrAfter(from, "day") &&
-      moment(dateAdded).isSameOrBefore(to, "day")
+      dayjs(dateAdded).isSameOrAfter(from, "day") &&
+      dayjs(dateAdded).isSameOrBefore(to, "day")
     );
   });
   return [true, transactions];
@@ -455,7 +455,7 @@ export const getQuote = async () => {
   // IF THERE IS NOT QUOTE OF THE DAY IN THE DATABASE
 
   try {
-    if (!quotes.length || !moment(today).isSame(quotes[0].date, "day")) {
+    if (!quotes.length || !dayjs(today).isSame(quotes[0].date, "day")) {
       if (quotes.length) await Quote.findByIdAndDelete(quotes[0]._id)
       const res = await fetch(
         `http://quotes.rest/qod.json?category=management`
