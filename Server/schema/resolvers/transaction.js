@@ -11,6 +11,7 @@ const transactionResolver = {
   },
   getTransactions: async ({ userId }) => {
     const user = await User.findById(userId);
+    console.log(user.transactions)
     return user.transactions;
   },
   addTransaction: async ({ userId, input }) => {

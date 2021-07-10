@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 import defaultCateg from "./defaultCategories";
+import category from "./category";
+import transaction from "./transaction";
+import goal from "./goal";
+import budget from "./budget";
 
 const user = mongoose.Schema({
   firstName: {
@@ -35,84 +39,12 @@ const user = mongoose.Schema({
     default: 0,
   },
   categories: {
-    type: [
-      {
-        name: {
-          type: String,
-          required: [true, "Category name is required."],
-        },
-        type: {
-          type: String,
-          required: [true, "Category type is required."],
-        },
-        icon: {
-          name: {
-            type: String,
-            required: [true, "Icon name is required"],
-          },
-          color: {
-            type: String,
-            required: [true, "Icon color is required"],
-          },
-        }
-      },
-    ],
+    type: [category],
     default: defaultCateg,
   },
-  transactions: [
-    {
-      categoryName: {
-        type: String,
-        required: [true, "Transaction category is required."],
-      },
-      type: {
-        type: String,
-        required: [true, "Transaction Type is required."],
-      },
-      amount: {
-        type: Number,
-        required: [true, "Transaction amount is required."],
-      },
-      description: {
-        type: String,
-        default: null,
-      },
-      balanceAfterTransaction: {
-        type: Number,
-        required: [true, "Balance is required."],
-      },
-      dateAdded: {
-        type: Date,
-        default: new Date(),
-      },
-    },
-  ],
-  goals: [
-    {
-      goalName: {
-        type: String,
-        required: [true, "Goal name is required"],
-      },
-      description: {
-        type: String,
-        required: false,
-      },
-      categoryName: {},
-      amount: {},
-    },
-  ],
-  budgets: [
-    {
-      categoryName: {
-        type: String,
-        required: [true, "Category Name is required"],
-      },
-      amount: {
-        type: Number,
-        required: [true, "Amount is required."],
-      },
-    },
-  ],
+  transactions: [transaction],
+  goals: [goal],
+  budgets: [budget],
 });
 
 export default mongoose.model("User", user);

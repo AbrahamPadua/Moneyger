@@ -127,7 +127,6 @@ export const login = async ({ email, password, loginType, ...data }, res) => {
               sameSite: "none",
               secure: true,
             });
-          console.log(user)
 
           return [
             true,
