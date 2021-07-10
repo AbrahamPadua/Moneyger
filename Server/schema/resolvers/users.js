@@ -5,16 +5,16 @@ const userResolver = {
     return await User.find({})
   },
 
-  getUser: async ({ id }) => {
-    return await User.findById(id)
+  getUser: async ({ userId }) => {
+    return await User.findById(userId)
   },
 
-  editUser: async ({ id, changes }) => {
-    return await User.findByIdAndUpdate(id, changes)
+  editUser: async ({ userId, changes }) => {
+    return await User.findByIdAndUpdate(userId, changes)
   },
 
-  delUser: async ({ id }) => {
-    return await User.findByIdAndDelete(id)
+  delUser: async ({ userId }) => {
+    return await User.findByIdAndDelete(userId)
   }
 };
 

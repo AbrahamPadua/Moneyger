@@ -1,6 +1,10 @@
 import LoggedIn from "../../models/loggedIn";
 
 const loggedInResolver = {
+  getLoggedIn: async ({ userId }) => {
+    const log = await LoggedIn.find({ userId });
+    return log[0]
+  },
   getLoggedIns: async () => {
     return await LoggedIn.find({});
   },

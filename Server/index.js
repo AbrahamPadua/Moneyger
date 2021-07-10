@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import schema from "./schema/schema";
 import resolvers from "./schema/resolvers";
 import { graphqlHTTP } from "express-graphql";
-// import { loggingMiddleware } from "./middlewares/auth"
+import { authenticate } from "./middlewares/auth"
 
 // CONSTANTS
 const app = express();
@@ -49,7 +49,8 @@ app.get("/", (req, res) => {
 // app.use(loggingMiddleware)
 app.use(
   "/graphql",
-  graphqlHTTP({ schema, rootValue: resolvers, graphiql: true })
+  authenticate,
+  graphqlHTTP({ schema, rootValue: resolvers, graphiql: process.env.MODE === "DEVELOPMENT" })
 );
 
 app.listen(PORT, () => {

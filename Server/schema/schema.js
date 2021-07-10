@@ -1,19 +1,8 @@
-import {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLInt,
-  GraphQLSchema,
-  GraphQLID,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLBoolean,
-  buildSchema,
-} from "graphql";
+import { buildSchema } from "graphql";
+import dateScalar from "./gqlDate";
 
 const schema = buildSchema(`
-  # scalar Date {
-    
-  # }
+  scalar Date
 
   # Schema for each user
   type User {
@@ -23,8 +12,8 @@ const schema = buildSchema(`
     email: String!
     password: String
     loginType: String!
-    currentBalance: Int!
-    tokenVersion: Int!
+    currentBalance: Int
+    tokenVersion: Int
     categories: [Category]
     transactions: [Transaction]
     budgets: [Budget]
@@ -32,11 +21,11 @@ const schema = buildSchema(`
   }
 
   input UserInput {
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
-    loginType: String!
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+    loginType: String
     categories: [CategoryInput]
     transactions: [TransactionInput]
     goals: [GoalInput]
@@ -51,14 +40,14 @@ const schema = buildSchema(`
     amount: Int!
     description: String
     balanceAfterTransaction: Int!
-    dateAdded: String
+    dateAdded: Date
   }
 
   input TransactionInput {
-    category: CategoryInput!
-    amount: Int!
+    category: CategoryInput
+    amount: Int
     description: String
-    balanceAfterTransaction: Int!
+    balanceAfterTransaction: Int
   }
 
   # Predefined and user-defined categories
@@ -66,7 +55,7 @@ const schema = buildSchema(`
     id: ID,
     name: String!
     type: CategoryType!
-    icon: Icon
+    icon: Icon!
   }
 
   enum CategoryType {
@@ -87,8 +76,8 @@ const schema = buildSchema(`
   }
 
   input IconInput {
-    name: String!
-    color: String!
+    name: String
+    color: String
   }
 
   # Goals of the User
@@ -115,10 +104,16 @@ const schema = buildSchema(`
   }
 
   input BudgetInput {
-    name: String!
+    name: String
     category: CategoryInput
     description: String
     amount: Int
+  }
+
+  type Quote {
+    id: ID
+    quote: String!,
+    author: String!
   }
 
   # logged in users
@@ -132,34 +127,68 @@ const schema = buildSchema(`
     userId: ID
   }
 
+
   type Query {
     # User Queries
-    getUser(id: ID!): User
+    getUser(userId: ID!): User
     getUsers: [User]
+
     # Category Query
-    getCategories: [Category]
+    getCategory(userId: ID!, categoryId: ID!): Category
+    getCategories(userId: ID!): [Category]
+
     # Transaction Queries
     getTransaction(userId: ID!, transactionId: ID!): Transaction
     getTransactions(userId: ID!): [Transaction]
+
+    # Budget Queries
+    getBudget(userId: ID!, budgetId: ID!): Budget 
+    getBudgets(userId: ID!): [Budget]
+
+    # Goal Queries
+    getGoal(userId: ID!, goalId: ID!): Goal
+    getGoals(userId: ID!): [Goal]
+
+    # Quote Query
+    getQuote: Quote
+
     # LoggedIn Queries
     getLoggedIns: [LoggedIn]
-    isLoggedIn(input: LoggedInInput): Boolean
+    getLoggedIn(userId: ID!): LoggedIn
   }
+
 
   type Mutation {
     # User Mutations
-    newUser(input: UserInput): Boolean
-    updateUser(id: ID, transaction: TransactionInput): Boolean
-    deleteUser(id: ID): Boolean
+    editUser(userId: ID, transaction: TransactionInput): Boolean
+    delUser(userId: ID): Boolean
+
     # Category Mutations
-    addCategory(input: CategoryInput): Boolean
+    addCategory(userId: ID!, input: CategoryInput): Boolean
+    editCategory(userId: ID!, categoryId: ID!, input: CategoryInput): Boolean
+    delCategory(userId: ID!, categoryId: ID!): Boolean
+
     # Transaction Mutations
-    addTransaction(userId: ID!, transaction: TransactionInput): Boolean
-    deleteTransaction(userId: ID!, transactionId: ID!): Boolean
+    addTransaction(userId: ID!, input: TransactionInput): Boolean
+    editTransaction(userId: ID!, transactionId: ID!, input: TransactionInput): Boolean
+    delTransaction(userId: ID!, transactionId: ID!): Boolean
+
+    # Budget Mutations
+    addBudget(userId: ID!, input: BudgetInput): Boolean
+    editBudget(userId: ID!, input: BudgetInput): Boolean
+    delBudget(userId: ID!, budgetId: ID!): Boolean
+
+    # Goal Mutations
+    addGoal(userId: ID!, input: GoalInput): Boolean
+    editGoal(userId: ID!, goalId: ID!, input: GoalInput): Boolean
+    delGoal(userId: ID!, goalId: ID!): Boolean
+
     # LoggedIn Mutations
     newLoggedIn(input: LoggedInInput) : Boolean
     delLoggedIn(input: LoggedInInput) : Boolean
   }
 `);
+
+Object.assign(schema._typeMap.Date, dateScalar);
 
 export default schema;
