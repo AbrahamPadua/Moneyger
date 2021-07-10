@@ -46,7 +46,7 @@ const JWTStorageManager = () => {
   };
 
   const getRefreshedToken = async () => {
-    const res = await fetch(`${API}/users/refresh_token`, {
+    const res = await fetch(`${API}/api/users/refresh_token`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

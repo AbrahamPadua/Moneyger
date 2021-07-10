@@ -1,8 +1,12 @@
+// FUNCTIONS
 import { useEffect, useState, useContext } from "react";
+// DATA
 import WEEKDAYS from "../../data/weekdays";
 import WORDS from "../../data/words";
-import Styles from "../../styles/Dashboard.module.scss";
+// CONTEXT
 import { DashData } from "../../Contexts";
+// STYLING
+import Styles from "../../styles/Dashboard.module.scss";
 
 const DashboardTitle = () => {
   const [word, setWord] = useState("Great");
@@ -23,7 +27,7 @@ const DashboardTitle = () => {
         global.window && clearInterval(changeWord);
       };
     }
-  }, [quote]);
+  }, []);
 
   return (
     <section className={Styles.dashHead}>

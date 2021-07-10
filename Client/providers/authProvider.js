@@ -44,7 +44,7 @@ const authProvider = {
     // localStorage.setItem("email", email);
 
     try {
-      const res = await fetch(`${API}/users/register`, {
+      const res = await fetch(`${API}/api/users/register`, {
         ...JSONPOST({ ...user, loginType: "form" }),
       });
 
@@ -83,7 +83,7 @@ const authProvider = {
       return;
     }
 
-    const res = await fetch(`${API}/users/login`, {
+    const res = await fetch(`${API}/api/users/login`, {
       ...JSONPOST({ ...user, loginType: "form" }, { credentials: "include" }),
     });
 
@@ -101,7 +101,7 @@ const authProvider = {
 
   loginGoogle: async (response) => {
     if (response.error) return;
-    const res = await fetch(`${API}/users/login`, {
+    const res = await fetch(`${API}/api/users/login`, {
       ...JSONPOST(
         { ...response, loginType: "google" },
         { credentials: "include" }
@@ -131,7 +131,7 @@ const authProvider = {
 
   getDetails: async (token) => {
     const options = { headers: { Authorization: `Bearer ${token}` } };
-    const res = await fetch(`${API}/users/details`, options);
+    const res = await fetch(`${API}/api/users/details`, options);
     const data = await res.json();
     // setUser({ id: data._id, isAdmin: data.isAdmin });
     return data;
@@ -139,7 +139,7 @@ const authProvider = {
 
   logout: async () => {
     await fetch(
-      `${API}/users/logout`,
+      `${API}/api/users/logout`,
       JSONPOST({}, { credentials: "include" })
     );
     JWTStorage.eraseToken();

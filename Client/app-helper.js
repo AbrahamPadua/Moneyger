@@ -1,4 +1,4 @@
-import JWTStorage from "./auth/JWTStorage";
+import JWTStorage from "./providers/JWTStorage";
 
 const API =
   process.env.NEXT_PUBLIC_ENDPOINT ||

@@ -4,15 +4,13 @@ import DashboardNav from "./DashboardNav";
 // STYLING
 import Styles from "../../styles/Dashboard.module.scss";
 import { useEffect } from "react";
-import authProvider from "../../auth/authProvider";
+import authProvider from "../../providers/authProvider";
 import Router from "next/router";
 
 const Dashboard = ({ title, children }) => {
   useEffect(() => {
     // Go to Login page if user is not logged in
-    if (!authProvider.isLoggedIn()) {
-      Router.push("/login");
-    }
+    if (!authProvider.isLoggedIn()) Router.push("/login");
   }, []);
 
   return (

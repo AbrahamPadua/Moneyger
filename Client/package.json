@@ -8,13 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^5.0.1",
     "chart.js": "2.9.3",
-    "moment": "^2.29.1",
+    "dayjs": "^1.10.6",
+    "graphql": "^15.5.1",
     "next": "10.x",
+    "next-apollo": "^5.0.6",
     "react": "17.x",
     "react-bootstrap": "^1.6.1",
     "react-chartjs-2": "2.11.1",

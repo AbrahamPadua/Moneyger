@@ -9,7 +9,7 @@ const categoryProvider = {
     try {
       newCategory.name = _.capitalize(newCategory.name)
       const res = await fetch(
-        `${API}/users/add-category`,
+        `${API}/api/users/add-category`,
         JSONPOST(newCategory, {
           Authorization: `Bearer ${JWTStorage.getToken()}`,
         })
@@ -38,7 +38,7 @@ const categoryProvider = {
     // For handling reload
     // if (!JWTStorage.getToken()) await JWTStorage.getRefreshedToken();
 
-    const res = await fetch(`${API}/users/category`, {
+    const res = await fetch(`${API}/api/users/category`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${JWTStorage.getToken()}`,
