@@ -3,9 +3,17 @@ import User from "../../models/user";
 const transactionResolver = {
   getTransaction: async ({ userId, transactionId }) => {
     const user = await User.findById(userId);
-    for (let transaction of user.transactions) {
-      // GRAPHQL ID IS STRING DATA TYPE
-      if (`${transaction._id}` === transactionId) return transaction;
+    const { transactions: Ts } = user
+    for (let [i, T] of Ts.entries()) {
+      // ? GRAPHQL ID IS STRING DATA TYPE
+      if (`${T._id}` === transactionId) {
+        if (Ts.length === 1) return [T] // IF USER HAS ONLY ONE TRANSACT
+        switch (i) {
+          case 0: return [T, Ts[i + 1]] // IF IT'S THE OLDEST TRANSACT
+          case (Ts.length - 1): return [Ts[i - 1], T] // IF IT'S THE LATEST TRANSACT
+          default: return [Ts[i - 1], T, Ts[i + 1]]
+        }
+      };
     }
     return false;
   },

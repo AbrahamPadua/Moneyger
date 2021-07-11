@@ -138,7 +138,7 @@ const schema = buildSchema(`
     getCategories(userId: ID!): [Category]
 
     # Transaction Queries
-    getTransaction(userId: ID!, transactionId: ID!): Transaction
+    getTransaction(userId: ID!, transactionId: ID!): [Transaction]
     getTransactions(userId: ID!): [Transaction]
 
     # Budget Queries

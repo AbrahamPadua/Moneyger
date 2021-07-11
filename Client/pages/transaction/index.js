@@ -3,29 +3,42 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Router from "next/router";
 import auth from "../../providers/authProvider";
 import transactionProvider from "../../providers/transactionProvider";
-import categoryProvider from "../../providers/categoryProvider";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import Styles from "../../styles/Transaction.module.scss";
 import Link from "next/link";
 import dayjs from "dayjs";
 
 const index = () => {
-  const [transaction, setTransaction] = useState({});
-  const [category, setCategory] = useState({
-    icon: "ban",
-    iconColor: "red",
-  });
+  const [prevT, setPrevT] = useState({})
+  const [currT, setCurrT] = useState({});
+  const [nextT, setNextT] = useState({})
   const [render, setRender] = useState(false);
 
   useEffect(async () => {
     await auth.checkAuth();
     const { id } = Router.query;
     const data = await transactionProvider.getTransaction(id);
-    const categData = await categoryProvider.getCategories();
-    if (data) setTransaction(data);
-    if (categData) {
-      setCategory(categData.find((x) => x.name === data.current.categoryName));
-    }
+    if (data) {
+      console.log(data[0])
+      switch (data.length) {
+        case 1:
+          setCurrT(data[0])
+          break
+        case 2:
+          if (data[0].id === id) {
+            setCurrT(data[0])
+            setNextT(data[1])
+          } else {
+            setPrevT(data[0])
+            setCurrT(data[1])
+          }
+          break;
+        case 3:
+          setPrevT(data[0])
+          setCurrT(data[1])
+          setNextT(data[2])
+      }
+    };
   }, [render]);
 
   return (
@@ -34,41 +47,41 @@ const index = () => {
         <section className={Styles.details}>
           <div
             className={Styles.category}
-            style={{ backgroundColor: category.iconColor }}
+            style={{ backgroundColor: currT.id ? currT.category.icon.color : "red" }}
           >
-            <FontAwesomeIcon icon={["fas", category.icon]} />
+            <FontAwesomeIcon icon={["fas", currT.id ? currT.category.icon.name : "ban"]} />
           </div>
           <div>
             <h2>Category: </h2>
-            {transaction.current ? transaction.current.categoryName : ""}
+            {currT.category ? currT.category.name : ""}
           </div>
           <div>
             <h2>Date:</h2>
-            {transaction.current ? dayjs(transaction.current.dateAdded).format("MMMM DD, YYYY") : ""}
+            {currT.id ? dayjs(currT.dateAdded).format("MMMM DD, YYYY") : ""}
           </div>
           <div>
             <h2>Amount:</h2>
-            {transaction.current ? transaction.current.amount : ""}
+            {currT.id ? currT.amount : ""}
           </div>
           <div>
             <h2>Description:</h2>
-            {transaction.current ? transaction.current.description : ""}
+            {currT.id ? currT.description : ""}
           </div>
           <div>
             <h2>Balance After Transaction:</h2>
-            {transaction.current ? transaction.current.balanceAfterTransaction : ""}
+            {currT.id ? currT.balanceAfterTransaction : ""}
           </div>
         </section>
         <section className={Styles.buttons}>
           <Link
-            href={`/transaction?id=${transaction.prev ? transaction.prev._id : ""
+            href={`/transaction?id=${prevT.id ? prevT.id : ""
               }`}
           >
             <a>
               <button
                 type="button"
                 className={Styles.button}
-                style={transaction.prev ? {} : { display: "none" }}
+                style={prevT.id ? {} : { display: "none" }}
                 onClick={() => setRender(!render)}
               >
                 prev
@@ -76,14 +89,13 @@ const index = () => {
             </a>
           </Link>
           <Link
-            href={`/transaction?id=${transaction.next ? transaction.next._id : ""
-              }`}
+            href={`/transaction?id=${nextT.id ? nextT.id : ""}`}
           >
             <a>
               <button
                 type="button"
                 className={Styles.button}
-                style={transaction.next ? {} : { display: "none" }}
+                style={nextT.id ? {} : { display: "none" }}
                 onClick={() => setRender(!render)}
               >
                 next

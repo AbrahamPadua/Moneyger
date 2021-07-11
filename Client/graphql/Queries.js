@@ -9,8 +9,28 @@ export const quoteQuery = gql`
   }
 `;
 
+export const TQuery = gql`
+  query getT ($uid: ID!, $tid: ID!) {
+    getTransaction (userId: $uid, transactionId: $tid) {
+      id
+      amount
+      description
+      dateAdded
+      balanceAfterTransaction
+      category {
+        name
+        type
+        icon {
+          name
+          color
+        }
+      }
+    }
+  }
+`
+
 export const TsQuery = gql`
-  query getTransactions($uid: ID!) {
+  query getTs ($uid: ID!) {
     getTransactions(userId: $uid) {
       id
       amount
@@ -30,7 +50,7 @@ export const TsQuery = gql`
 `;
 
 export const CsQuery = gql`
-  query ($uid: ID!) {
+  query getCs ($uid: ID!) {
     getCategories (userId: $uid) {
       id
       name
