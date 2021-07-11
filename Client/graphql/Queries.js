@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
 export const quoteQuery = gql`
   query {
@@ -7,23 +7,37 @@ export const quoteQuery = gql`
       quote
     }
   }
-`
+`;
 
 export const TsQuery = gql`
-  query getTransactions ($userId: ID!) {
-    getTransactions (userId: $userId) {
-      transactions {
-        amount
-        description
-        dateAdded
-        balanceAfterTransaction
-        category {
+  query getTransactions($uid: ID!) {
+    getTransactions(userId: $uid) {
+      id
+      amount
+      description
+      dateAdded
+      balanceAfterTransaction
+      category {
+        name
+        type
+        icon {
           name
-          icon {
-            name
-            color
-          }
+          color
         }
+      }
+    }
+  }
+`;
+
+export const CsQuery = gql`
+  query ($uid: ID!) {
+    getCategories (userId: $uid) {
+      id
+      name
+      type
+      icon {
+        name
+        color
       }
     }
   }

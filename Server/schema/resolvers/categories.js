@@ -18,7 +18,7 @@ const categoryResolver = {
 
   getCategories: async ({ userId }) => {
     try {
-      const user = await User.findById({ userId });
+      const user = await User.findById(userId);
       if (user) return user.categories;
       return null;
     } catch (err) {
@@ -34,7 +34,7 @@ const categoryResolver = {
       let v = user.categories.find(
         (C) => C.name.toLowerCase() === input.name.toLowerCase()
       );
-      if (!v) return false;
+      if (v) return false;
       user.categories.push(input);
       await user.save();
       return true;

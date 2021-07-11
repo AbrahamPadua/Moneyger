@@ -5,8 +5,7 @@ const API =
   `https://zuitt-budget-tracker-server.herokuapp.com/api`;
 // For handling Forms
 const inputHandler = (e, state, setState) => {
-  const name = e.target.name;
-  const value = e.target.value;
+  const { name, value } = e.target
   setState({ ...state, [name]: value });
 };
 // To reduce redundancy in fetch requests

@@ -3,21 +3,22 @@ import { API, JSONPOST } from "../app-helper";
 import JWTStorage from "./JWTStorage";
 import Router from "next/router";
 import _ from "lodash";
+import client from "../graphql/client";
+import { addC } from "../graphql/mutations";
+import { CsQuery } from "../graphql/queries";
 
 const categoryProvider = {
-  createCategory: async (newCategory) => {
+  createCategory: async (newC) => {
     try {
-      newCategory.name = _.capitalize(newCategory.name)
-      const res = await fetch(
-        `${API}/api/users/add-category`,
-        JSONPOST(newCategory, {
-          Authorization: `Bearer ${JWTStorage.getToken()}`,
-        })
-      );
+      newC.name = _.capitalize(newC.name);
 
-      const data = await res.text();
+      const uid = localStorage.getItem("uid");
+      const { data } = await client.mutate({
+        mutation: addC,
+        variables: { uid, input: newC },
+      });
 
-      if (res.status < 400) {
+      if (data.addCategory) {
         Swal.fire(
           "Category Added",
           "The new Category has been added",
@@ -26,34 +27,34 @@ const categoryProvider = {
           Router.push("/transactions/new");
         });
       } else {
-        console.log(data);
-        Swal.fire("Error", data, "error");
+        Swal.fire("Error", "The Category is already existing", "error");
       }
     } catch (err) {
       console.log(err);
       Swal.fire();
     }
   },
+
   getCategories: async () => {
     // For handling reload
     // if (!JWTStorage.getToken()) await JWTStorage.getRefreshedToken();
 
-    const res = await fetch(`${API}/api/users/category`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${JWTStorage.getToken()}`,
-      },
-      credentials: "include",
+    const uid = localStorage.getItem("uid");
+    const { loading, error, data } = await client.query({
+      query: CsQuery,
+      variables: { uid },
     });
-    const data = await res.json();
 
-    // IF SUCCESS
-    if (res.status < 400) {
-      return data.data;
+    if (!loading) {
+      if (!error) {
+        return data.getCategories
+      } else {
+        console.log(error)
+        return null
+      }
     }
-    // If FAILED
-    console.log(data);
-    return null;
+
+    return null
   },
   visualizeCategories: async () => { },
 };

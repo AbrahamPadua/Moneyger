@@ -30,11 +30,13 @@ const NewCategory = () => {
 };
 
 const NewCategoryForm = () => {
-  const [newCategory, setNewCategory] = useState({
+  const [newC, setNewC] = useState({
     name: "",
     type: "",
-    icon: "",
-    iconColor: "#01987a",
+    icon: {
+      name: "",
+      color: "#01987a",
+    },
   });
   const [icons, setIcons] = useState(<></>);
   const [tentativeIcon, setTentativeIcon] = useState("");
@@ -43,13 +45,12 @@ const NewCategoryForm = () => {
   useEffect(async () => {
     await auth.checkAuth();
     setIcons(Icons.getIcons(setTentativeIcon));
-    // document.querySelector("");
   }, []);
 
   const createCategory = (e) => {
     e.preventDefault();
-    for (let x of Object.keys(newCategory)) {
-      if (!newCategory[x]) {
+    for (let x of Object.keys(newC)) {
+      if (!newC[x]) {
         Swal.fire(
           "Incomplete Form",
           "Please make sure the you have filled all the required field.",
@@ -59,12 +60,12 @@ const NewCategoryForm = () => {
       }
     }
 
-    categoryProvider.createCategory(newCategory);
+    categoryProvider.createCategory(newC);
   };
 
   const changeIcon = (e) => {
     e.preventDefault();
-    setNewCategory({ ...newCategory, icon: tentativeIcon });
+    setNewC({ ...newC, icon: { name: tentativeIcon, color: newC.icon.color } });
     Icons.toggleIconSelection(e);
   };
 
@@ -75,11 +76,6 @@ const NewCategoryForm = () => {
     }
     setTentativeIcon(e.target.id);
     e.target.classList.add(Styles.select);
-  };
-
-  const searchIcons = (e) => {
-    const filteredIcons = Icons.search(e.target.value);
-    setSearchValue(e.target.value);
   };
 
   const filterIcons = (e) => {
@@ -107,7 +103,7 @@ const NewCategoryForm = () => {
           <Form.Control
             type="text"
             name="name"
-            onChange={(e) => inputHandler(e, newCategory, setNewCategory)}
+            onChange={(e) => inputHandler(e, newC, setNewC)}
             placeholder="Enter category name"
             className={Styles.formInput}
             required
@@ -118,7 +114,7 @@ const NewCategoryForm = () => {
           <Form.Control
             as="select"
             name="type"
-            onChange={(e) => inputHandler(e, newCategory, setNewCategory)}
+            onChange={(e) => inputHandler(e, newC, setNewC)}
             defaultValue="default"
             className={Styles.formInput}
             required
@@ -139,24 +135,24 @@ const NewCategoryForm = () => {
           >
             Select
           </button>
-          {newCategory.icon ? (
+          {newC.icon.name ? (
             <>
               <div
                 className={Styles.shownIconWrapper}
-                style={{ backgroundColor: newCategory.iconColor }}
+                style={{ backgroundColor: newC.icon.color }}
               >
                 <FontAwesomeIcon
-                  icon={["fas", newCategory.icon]}
+                  icon={["fas", newC.icon.name]}
                   className={Styles.shownIcon}
                 />
               </div>
-              {newCategory.icon}
+              {newC.icon.name}
             </>
           ) : (
             <>
               <div
                 className={Styles.shownIconWrapper}
-                style={{ backgroundColor: newCategory.iconColor }}
+                style={{ backgroundColor: newC.icon.color }}
               >
                 <FontAwesomeIcon
                   icon={["fas", "ad"]}
@@ -173,9 +169,14 @@ const NewCategoryForm = () => {
           </Form.Label>
           <input
             type="color"
-            name="iconColor"
-            value={newCategory.iconColor}
-            onChange={(e) => inputHandler(e, newCategory, setNewCategory)}
+            name="color"
+            value={newC.icon.color}
+            onChange={(e) =>
+              setNewC({
+                ...newC,
+                icon: { name: tentativeIcon, color: e.target.value },
+              })
+            }
           />
         </Form.Group>
         <div className={Styles.buttonWrapper}>
@@ -195,7 +196,7 @@ const NewCategoryForm = () => {
             placeholder="Search Icons..."
             className={Styles.iconSearch}
             value={searchValue}
-            onChange={searchIcons}
+            onChange={(e) => setSearchValue(e.target.value)}
           />
           <Button className={Styles.SearchButton} onClick={filterIcons}>
             Search

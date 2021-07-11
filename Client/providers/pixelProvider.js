@@ -46,7 +46,7 @@ const pixelProvider = {
         // Increment the amount on
         onDateTransacts.forEach((transact) => {
           amount =
-            transact.type.toLowerCase() == "income"
+            transact.category.type.toLowerCase() == "income"
               ? amount + transact.amount
               : amount - transact.amount;
         });

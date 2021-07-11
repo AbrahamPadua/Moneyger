@@ -64,7 +64,7 @@ const NewTransactionForm = () => {
       .filter((categ) => categ.type.toLowerCase() === type.toLowerCase())
       .map((categ) => {
         return (
-          <option key={categ["_id"]} value={categ.name}>
+          <option key={categ.id} value={categ.name}>
             {categ.name}
           </option>
         );

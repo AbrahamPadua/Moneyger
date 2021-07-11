@@ -1,6 +1,5 @@
 // FUNCTIONS
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import transactionProvider from "../../providers/transactionProvider";
 import categoryProvider from "../../providers/categoryProvider";
 import auth from "../../providers/authProvider";
@@ -9,6 +8,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { InputGroup, FormControl, Form } from "react-bootstrap";
 import Dashboard from "../../components/Dashboard/Dashboard";
+import TransactTable from "../../components/TransactTable";
 // STYLING
 import Styles from "../../styles/Transaction.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,10 +18,9 @@ const nShow = 5;
 
 const Transactions = () => {
   const [type, setType] = useState("All");
-  const [allTransactions, setTransactions] = useState([]);
+  const [allTs, setAllTs] = useState([]);
   const [nPage, setNPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
-  const [categories, setCategories] = useState([]);
   const [shownData, setShowData] = useState([]);
 
   useEffect(async () => {
@@ -29,40 +28,35 @@ const Transactions = () => {
     await auth.checkAuth();
     // const { page } = Router.query;
     // if (page) setNPage(page);
-    const data = await Promise.all([
-      transactionProvider.getTransactions(),
-      categoryProvider.getCategories(),
-    ]);
-    if (data[0]) setTransactions(data[0]);
-    if (data[1]) setCategories(data[1]);
+    const data = await transactionProvider.getTransactions()
+    if (data) setAllTs(data)
   }, []);
 
   useEffect(() => {
-    if (allTransactions) {
-      setMaxPage(Math.floor((allTransactions.length - 1) / nShow) + 1);
+    if (allTs) {
+      setMaxPage(Math.floor((allTs.length - 1) / nShow) + 1);
 
       // Copy transacts then
-      const transacts = allTransactions
+      const transacts = allTs
         .slice()
         .reverse()
         .slice((nPage - 1) * nShow, nPage * nShow);
       const records = transacts.map((transaction) => {
         if (
           type === "All" ||
-          transaction.type.toLowerCase() === type.toLowerCase()
+          transaction.category.type.toLowerCase() === type.toLowerCase()
         ) {
           return (
-            <RecordsView
-              key={transaction["_id"]}
+            <TransactTable
+              key={transaction.id}
               {...transaction}
-              categories={categories}
             />
           );
         }
       });
       setShowData(records);
     }
-  }, [allTransactions, type, categories, nPage]);
+  }, [allTs, type, nPage]);
 
   return (
     <Dashboard title="Transactions">
@@ -123,44 +117,6 @@ const Transactions = () => {
         </div>
       </Link>
     </Dashboard>
-  );
-};
-
-const RecordsView = ({
-  amount,
-  description,
-  category,
-  type,
-  dateAdded: date,
-  _id: id,
-  balanceAfterTransaction,
-}) => {
-  return (
-    <>
-      <tr>
-        <td className={Styles.category}>
-          <div style={{ backgroundColor: category.icon.color }}>
-            <FontAwesomeIcon
-              icon={["fas", category.icon.name]}
-              className={Styles.icon}
-            />
-          </div>
-        </td>
-        {category.type.match(/expense/i) ? (
-          <td className={Styles.expense}> -₱{amount} </td>
-        ) : (
-          <td className={Styles.income}>+₱{amount}</td>
-        )}
-        <td>{description}</td>
-        <td>₱{balanceAfterTransaction}</td>
-        <td>{dayjs(date).format("MM/DD/YY")}</td>
-        <td>
-          <a href={`/transaction/?id=${id}`}>
-            <button type="button">View</button>
-          </a>
-        </td>
-      </tr>
-    </>
   );
 };
 
