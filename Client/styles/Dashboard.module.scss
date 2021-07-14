@@ -124,7 +124,7 @@
 
         ul {
           list-style: none;
-          padding-top: 7px;
+          padding-top: 30px;
 
           li {
             font-family: monospace;
@@ -144,6 +144,14 @@
           .pixelsRow {
             @include flex-start;
             gap: 4px;
+
+            .pixelMonth {
+              width: 10px;
+              position: relative;
+              font-family: monospace;
+              font-size: 0.85rem;
+              color: rgb(71, 71, 71);
+            }
 
             .pixel {
               width: 10px;

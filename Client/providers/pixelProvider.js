@@ -1,26 +1,39 @@
 import Pixel from "../components/Dashboard/Pixel";
 import Styles from "../styles/Dashboard.module.scss"
+import dayjs from "dayjs"
 
 const pixelProvider = {
   createTable: function (data) {
     const WEEKS = 52;
-    const table = [[], [], [], [], [], [], []];
+    const table = [[], [], [], [], [], [], [], []];
     let date = new Date();
     let today = new Date(date);
 
     // Iterate through each week
-    for (let i = 0; i < WEEKS; i++) {
+    for (let i = 0; i <= WEEKS; i++) {
       if (date.toDateString() === today.toDateString()) {
-        for (let j = today.getDay(); j >= 0; j--) {
+        for (let j = today.getDay() + 1; j >= 0; j--) {
+          if (j === 0) {
+            table[j].unshift(this.createMonth(date))
+            date.setDate(date.getDate() - 1);
+            continue
+          }
           const newPixel = this.createPixel(data, date);
           table[j].unshift(newPixel);
-          date.setDate(date.getDate() - 1);
+          if (j != 1)
+            date.setDate(date.getDate() - 1);
         }
       } else {
-        for (let j = 6; j >= 0; j--) {
+        for (let j = 7; j >= 0; j--) {
+          if (j === 0) {
+            table[j].unshift(this.createMonth(date))
+            date.setDate(date.getDate() - 1);
+            continue
+          }
           const newPixel = this.createPixel(data, date);
           table[j].unshift(newPixel);
-          date.setDate(date.getDate() - 1);
+          if (j != 1)
+            date.setDate(date.getDate() - 1);
         }
       }
     }
@@ -62,6 +75,16 @@ const pixelProvider = {
         numOfT={numOfT}
       ></Pixel>
     );
+  },
+  createMonth: (date) => {
+    let month;
+    if (dayjs(date).month() == 10 && dayjs(date).date() == 1) {
+      console.log(date)
+    }
+    if (dayjs(date).date() <= 7) {
+      month = dayjs(date).format("MMM")
+    }
+    return <div key={date.toISOString()} className={Styles.pixelMonth}>{month}</div>
   }
 }
 
