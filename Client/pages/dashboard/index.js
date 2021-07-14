@@ -13,28 +13,32 @@ import Styles from "../../styles/Dashboard.module.scss";
 import DashboardTitle from "../../components/Dashboard/DashboardTitle";
 // CONTEXTS
 import { DashData } from "../../Contexts";
+import { quoteQuery } from "../../graphql/queries.js";
 import client from "../../graphql/client";
-import { quoteQuery } from "../../graphql/queries";
 
 const index = ({ quote }) => {
   const [pixels, setPixels] = useState([[], [], [], [], [], [], []]);
   const [currentData, setCurrentData] = useState([]);
   const [pixelDate, setPixelDate] = useState("");
+  const [hasMounted, setHasMounted] = useState(false)
 
   useEffect(async () => {
-    await auth.checkAuth();
-    const data = await transactions.getTransactions();
+    if (!hasMounted) setHasMounted(true)
+    if (hasMounted) {
+      await auth.checkAuth();
+      const data = await transactions.getTransactions();
 
-    // Setting up the pixels table
-    let table;
-    if (data) {
-      table = pixel.createTable(data);
-      if (data.length) setCurrentData(data);
-    } else {
-      table = pixel.createTable();
+      // Setting up the pixels table
+      let table;
+      if (data) {
+        table = pixel.createTable(data);
+        if (data.length) setCurrentData(data);
+      } else {
+        table = pixel.createTable();
+      }
+      setPixels(table);
     }
-    setPixels(table);
-  }, []);
+  }, [hasMounted]);
 
   return (
     <DashData.Provider value={{ currentData, quote, pixelDate, setPixelDate }}>

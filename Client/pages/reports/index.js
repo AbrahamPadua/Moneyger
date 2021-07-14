@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import transactionProvider from "../../providers/transactionProvider";
 import categoryProvider from "../../providers/categoryProvider";
-import moment from "moment";
+import dayjs from "dayjs";
 // COMPONENTS
 import { Form, Col } from "react-bootstrap";
 import { Pie } from "react-chartjs-2";
@@ -41,24 +41,24 @@ const CategoryBreakdown = () => {
 
     // Filtering the data
     let incomeData = filteredTransacts.filter(
-      (transaction) => transaction.type === "Income"
+      (transaction) => transaction.category.type === "Income"
     );
     let expenseData = filteredTransacts.filter(
-      (transaction) => transaction.type === "Expense"
+      (transaction) => transaction.category.type === "Expense"
     );
 
     // Getting the Income
     for (let transaction of incomeData) {
-      let i = incomeLabels.indexOf(transaction.categoryName);
+      let i = incomeLabels.indexOf(transaction.category.name);
       if (i === -1) {
-        incomeLabels.push(transaction.categoryName);
+        incomeLabels.push(transaction.category.name);
       }
-      i = incomeLabels.indexOf(transaction.categoryName);
+      i = incomeLabels.indexOf(transaction.category.name);
       // console.log(data);
       if (!income[i]) income[i] = 0;
       income[i] += transaction.amount;
-      const categ = categories.find(categ => categ.name == transaction.categoryName)
-      incomeColors[i] = categ.iconColor;
+      const categ = categories.find(categ => categ.name == transaction.category.name)
+      incomeColors[i] = categ.icon.color;
     }
     const Income = {
       labels: incomeLabels,
@@ -74,16 +74,16 @@ const CategoryBreakdown = () => {
 
     // Getting the expenses
     for (let transaction of expenseData) {
-      let i = expenseLabels.indexOf(transaction.categoryName);
+      let i = expenseLabels.indexOf(transaction.category.name);
       if (i === -1) {
-        expenseLabels.push(transaction.categoryName);
+        expenseLabels.push(transaction.category.name);
       }
-      i = expenseLabels.indexOf(transaction.categoryName);
+      i = expenseLabels.indexOf(transaction.category.name);
       // console.log(data);
       if (!expense[i]) expense[i] = 0;
       expense[i] += transaction.amount;
-      const categ = categories.find(categ => categ.name == transaction.categoryName)
-      expenseColors[i] = categ.iconColor;
+      const categ = categories.find(categ => categ.name == transaction.category.name)
+      expenseColors[i] = categ.icon.color;
     }
     const Expense = {
       labels: expenseLabels,
@@ -106,14 +106,14 @@ const CategoryBreakdown = () => {
         const to = e.target.name;
         setFilteredTransacts(
           allTransacts.filter(({ dateAdded }) =>
-            moment(dateAdded).isSameOrBefore(to, "day")
+            dayjs(dateAdded).isSameOrBefore(to, "day")
           )
         );
       } else {
         const from = e.target.name;
         setFilteredTransacts(
           allTransacts.filter(({ dateAdded }) =>
-            moment(dateAdded).isSameOrAfter(from, "day")
+            dayjs(dateAdded).isSameOrAfter(from, "day")
           )
         );
       }

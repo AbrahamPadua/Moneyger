@@ -18,7 +18,7 @@ const View = ({ title, children }) => {
     }
   }, []);
 
-  if (!hasMounted) return null;
+  if (!hasMounted) return <></>;
 
   return (
     <>

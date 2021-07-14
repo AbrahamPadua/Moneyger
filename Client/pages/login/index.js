@@ -1,84 +1,52 @@
-// Functions
-import { useState } from "react";
-import auth from "../../providers/authProvider";
-import { inputHandler } from "../../app-helper";
+// FUNCTIONS
+import { useState, useEffect, createContext } from "react";
 // Components
-import Link from "next/link";
 import View from "../../components/View";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { GoogleLogin } from "react-google-login";
+import Login from "../../components/Login";
+import Register from "../../components/Register";
+import { Row, Col } from "react-bootstrap";
 // STYLES
 import Styles from "../../styles/Login.module.scss";
+// CONTEXT
+import { FormContext } from "../../Contexts"
 
-const Login = () => {
-  const [user, setUser] = useState({ email: "", password: "" });
+const loginStyles = {
+  left: "50%",
+  borderTopRightRadius: "10px",
+  borderBottomRightRadius: "10px"
+}
+
+const registerStyles = {
+  left: "24%",
+  borderTopLeftRadius: "10px",
+  borderBottomLeftRadius: "10px"
+}
+
+const index = () => {
+  // Login Form if true else register
+  const [form, setForm] = useState(true)
 
   return (
-    <View title="Login Page | Booking App">
-      <Row className={Styles.loginPage}>
-        <Col xs md="6" className={Styles.login}>
-          <div className={Styles.loginFormWrapper}>
-            <h1 className={Styles.loginHeader}>
-              Login your <span className={Styles.m}></span>
-              <span>oneyger</span>
-            </h1>
-            <Form
-              className={Styles.loginForm}
-              onSubmit={(e) => auth.login(e, user)}
-            >
-              <Form.Group controlId="email" className={Styles.loginGroup}>
-                <Form.Control
-                  type="text"
-                  name="email"
-                  value={user.email}
-                  onChange={(e) => inputHandler(e, user, setUser)}
-                  className={Styles.loginInput}
-                  required
-                ></Form.Control>
-                <Form.Label className={Styles.loginLabel}>Email</Form.Label>
-              </Form.Group>
-              <Form.Group controlId="password" className={Styles.loginGroup}>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  value={user.password}
-                  onChange={(e) => inputHandler(e, user, setUser)}
-                  className={Styles.loginInput}
-                  required
-                ></Form.Control>
-                <Form.Label className={Styles.loginLabel}>Password </Form.Label>
-              </Form.Group>
-              <Button
-                variant="warning"
-                type="submit"
-                className="mt-3 w-100 mb-2"
-                className={Styles.loginButton}
-              >
-                Login
-              </Button>
-              <p>or</p>
-              <GoogleLogin
-                clientId="431998142853-sdbhioev7kghr6abjq0lpc1cep52p002.apps.googleusercontent.com"
-                className="w-100 text-center d-flex justify-content-center"
-                buttonText="Login"
-                // cookiePolicy={"single_host_origin"}
-                onSuccess={auth.loginGoogle}
-                onFailure={auth.loginGoogle}
-                className={Styles.googleButton}
-              />
-              <div className={Styles.loginFooter}>
-                <p>Create new Moneyger?&nbsp;</p>
-                <Link href="/register">
-                  <a className={Styles.toRegister}>Create Account</a>
-                </Link>
-              </div>
-            </Form>
-          </div>
-          <div className={Styles.page}></div>
-        </Col>
-      </Row>
-    </View>
+    <FormContext.Provider value={{ setForm }}>
+      <View title="Login Page | Booking App">
+        <Row className={Styles.authPage}>
+          <Col xs md="6" className={Styles.auth}>
+            <div className={Styles.authFormWrapper}>
+              <h1 className={Styles.authHeader}>
+                Login your <span className={Styles.m}></span>
+                <span>oneyger</span>
+              </h1>
+              <Login Styles={Styles} />
+            </div>
+            <div className={Styles.authFormWrapper}>
+              <Register Styles={Styles} />
+            </div>
+          </Col>
+        </Row>
+        <div className={Styles.page} style={form ? loginStyles : registerStyles}></div>
+      </View>
+    </FormContext.Provider>
   );
 };
 
-export default Login;
+export default index;

@@ -89,14 +89,25 @@ const NewTransactionForm = () => {
 
     // const error = await transactionProvider.createTransaction(newT);
     newT.category = allCs.find(categ => categ.name === newT.category)
-    delete newT.category._id
-    delete newT.type
-    newT.amount = +newT.amount
-    const res = await addTransaction({ variables: { uid: localStorage.getItem("uid"), input: newT } })
-    console.log(res)
+    const newTransact = {
+      amount: +newT.amount,
+      description: newT.description,
+      category: {
+        name: newT.category.name,
+        type: newT.category.type,
+        icon: {
+          name: newT.category.icon.name,
+          color: newT.category.icon.color
+        }
+      }
+    }
 
-    // if (error)
-    //   Swal.fire(["Something Went Wrong", "Please try again...", "error"])
+    console.log(newTransact)
+    const { data: { addTransaction: success } } = await addTransaction({ variables: { uid: localStorage.getItem("uid"), input: newTransact } })
+    if (success) {
+      console.log(`SUCCESS!`)
+    }
+
     Router.push("/transactions");
   };
 

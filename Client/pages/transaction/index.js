@@ -9,9 +9,9 @@ import Link from "next/link";
 import dayjs from "dayjs";
 
 const index = () => {
-  const [prevT, setPrevT] = useState({})
-  const [currT, setCurrT] = useState({});
-  const [nextT, setNextT] = useState({})
+  const [prevT, setPrevT] = useState(null)
+  const [currT, setCurrT] = useState(null);
+  const [nextT, setNextT] = useState(null)
   const [render, setRender] = useState(false);
 
   useEffect(async () => {
@@ -19,7 +19,7 @@ const index = () => {
     const { id } = Router.query;
     const data = await transactionProvider.getTransaction(id);
     if (data) {
-      console.log(data[0])
+      console.log(data)
       switch (data.length) {
         case 1:
           setCurrT(data[0])
@@ -28,9 +28,11 @@ const index = () => {
           if (data[0].id === id) {
             setCurrT(data[0])
             setNextT(data[1])
+            setPrevT(null)
           } else {
             setPrevT(data[0])
             setCurrT(data[1])
+            setNextT(null)
           }
           break;
         case 3:
@@ -47,41 +49,41 @@ const index = () => {
         <section className={Styles.details}>
           <div
             className={Styles.category}
-            style={{ backgroundColor: currT.id ? currT.category.icon.color : "red" }}
+            style={{ backgroundColor: currT ? currT.category.icon.color : "red" }}
           >
-            <FontAwesomeIcon icon={["fas", currT.id ? currT.category.icon.name : "ban"]} />
+            <FontAwesomeIcon icon={["fas", currT ? currT.category.icon.name : "ban"]} />
           </div>
           <div>
             <h2>Category: </h2>
-            {currT.category ? currT.category.name : ""}
+            {currT ? currT.category.name : ""}
           </div>
           <div>
             <h2>Date:</h2>
-            {currT.id ? dayjs(currT.dateAdded).format("MMMM DD, YYYY") : ""}
+            {currT ? dayjs(currT.dateAdded).format("MMMM DD, YYYY") : ""}
           </div>
           <div>
             <h2>Amount:</h2>
-            {currT.id ? currT.amount : ""}
+            {currT ? currT.amount : ""}
           </div>
           <div>
             <h2>Description:</h2>
-            {currT.id ? currT.description : ""}
+            {currT ? currT.description : ""}
           </div>
           <div>
             <h2>Balance After Transaction:</h2>
-            {currT.id ? currT.balanceAfterTransaction : ""}
+            {currT ? currT.balanceAfterTransaction : ""}
           </div>
         </section>
         <section className={Styles.buttons}>
           <Link
-            href={`/transaction?id=${prevT.id ? prevT.id : ""
+            href={`/transaction?id=${prevT ? prevT.id : ""
               }`}
           >
             <a>
               <button
                 type="button"
                 className={Styles.button}
-                style={prevT.id ? {} : { display: "none" }}
+                style={prevT ? {} : { display: "none" }}
                 onClick={() => setRender(!render)}
               >
                 prev
@@ -89,13 +91,13 @@ const index = () => {
             </a>
           </Link>
           <Link
-            href={`/transaction?id=${nextT.id ? nextT.id : ""}`}
+            href={`/transaction?id=${nextT ? nextT.id : ""}`}
           >
             <a>
               <button
                 type="button"
                 className={Styles.button}
-                style={nextT.id ? {} : { display: "none" }}
+                style={nextT ? {} : { display: "none" }}
                 onClick={() => setRender(!render)}
               >
                 next

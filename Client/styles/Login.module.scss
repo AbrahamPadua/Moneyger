@@ -1,14 +1,14 @@
 @use "./fonts" as *;
 @use "./mixins" as *;
 
-.loginPage {
+.authPage {
   @include flex-center;
   background: url("/images/bg.png") no-repeat;
   background-size: auto;
   width: 100vw;
   height: 100vh;
 
-  .login {
+  .auth {
     display: flex;
     background-color: aquamarine;
     padding: 0;
@@ -16,11 +16,11 @@
     min-width: 50%;
     height: 60%;
 
-    .loginFormWrapper {
+    .authFormWrapper {
       width: 50%;
       padding: 4vh 3vw;
 
-      .loginHeader {
+      .authHeader {
         color: rgb(61, 61, 61);
         font-size: 2rem;
 
@@ -37,14 +37,17 @@
         }
       }
 
-      .loginForm {
+      .authForm {
         @include flex-center;
         flex-flow: column nowrap;
 
-        .loginFooter {
+        .authFooter {
           @include flex-center;
           position: relative;
-          top: 6vh;
+
+          &.loginFooter {
+            top: 5vh;
+          }
 
           p {
             margin: 0;
@@ -54,21 +57,15 @@
     }
   }
 
-  .page {
-    background-color: #fff;
-    width: 50%;
-    padding-left: 2px;
-  }
-
-  .loginGroup {
+  .authGroup {
     width: 100%;
     margin-top: 4vh;
 
-    &:nth-of-type(2) {
+    &.second {
       margin-top: 0;
     }
 
-    .loginLabel {
+    .authLabel {
       position: relative;
       top: -35px;
       left: 14px;
@@ -78,8 +75,8 @@
       transition: all 0.3s linear;
     }
 
-    .loginInput:valid + .loginLabel,
-    .loginInput:focus + .loginLabel {
+    .authInput:valid + .authLabel,
+    .authInput:focus + .authLabel {
       top: -65px;
       left: 2px;
       font-size: 0.9rem;
@@ -87,7 +84,7 @@
   }
 }
 
-.loginButton {
+.authButton {
   width: 80%;
   border-radius: 5px;
   margin: 1vh 0;
@@ -100,4 +97,28 @@
   margin: 1vh 0;
   margin-top: 0;
   border-radius: 5px !important;
+}
+
+.regForm {
+  .authGroup {
+    margin: 0.5vh;
+    margin-bottom: -2vh;
+
+    .authLabel {
+      user-select: none;
+    }
+
+    &:first-of-type {
+      margin-top: 2vh;
+    }
+  }
+}
+
+.page {
+  position: absolute;
+  width: 25%;
+  height: 60%;
+  top: 22.5%;
+  background-color: white;
+  transition: all 0.5s;
 }

@@ -55,8 +55,7 @@ const categoryProvider = {
     }
 
     return null
-  },
-  visualizeCategories: async () => { },
+  }
 };
 
 export default categoryProvider;

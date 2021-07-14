@@ -5,16 +5,18 @@ import moment from "moment";
 import Styles from "../../styles/Dashboard.module.scss";
 // CONTEXT
 import { DashData } from "../../Contexts";
+import dayjs from "dayjs";
 
 const Transactions = () => {
   const { currentData: transactions, pixelDate } = useContext(DashData);
   const [data, setData] = useState(transactions);
 
   useEffect(() => {
-    if (transactions && transactions.length > 3) {
-      setData(transactions.reverse().slice(0, 3));
+    const Ts = [...transactions]
+    if (Ts && Ts.length > 3) {
+      setData(Ts.reverse().slice(0, 3));
     } else {
-      setData(transactions.reverse());
+      setData(Ts.sort((T1, T2) => dayjs(T1.dateAdded).isAfter(T2.dateAdded)));
     }
   }, [transactions]);
 
@@ -44,10 +46,10 @@ const Transactions = () => {
                 : <>Latest Transactions: </>
               }
             </p>
-            {data.map(({ _id, description, amount, type }) => {
+            {data.map(({ id, description, amount, type }) => {
               return (
                 <div
-                  key={_id}
+                  key={id}
                   className={Styles.transactionDetail}
                 >
                   <span
@@ -58,7 +60,7 @@ const Transactions = () => {
                     ₱{amount}{" "}
                   </span>
                   <span className={Styles.description}>
-                    {description.slice(0, 20)}
+                    {description.slice(0, 20)}...
                   </span>
                 </div>
               );

@@ -1,15 +1,15 @@
 // FUNCTIONS
 import { useState, useEffect } from "react";
 import { inputHandler } from "../../app-helper";
-import auth from "../../providers]/authProvider";
-import categoryProvider from "../../auth/categoryProvider";
+import auth from "../../providers/authProvider";
+import categoryProvider from "../../providers/categoryProvider";
 // COMPONENTS
 import { Form, Button, Row, Col, Card } from "react-bootstrap";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // STYLING
 import Styles from "../../styles/Categories.module.scss";
-import Icons from "../../auth/iconProvider";
+import Icons from "../../providers/iconProvider";
 
 const NewCategory = () => {
   return (

@@ -1,27 +1,36 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client"
-import { onError } from "@apollo/client/link/error"
-import { API } from "../app-helper"
+import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { API } from "../app-helper";
+import JWTStorage from "../providers/JWTStorage";
 
-const errorLink = onError(({ graphqlErrors, networkError }) => {
-  if (graphqlErrors) {
-    console.log(graphqlErrors)
-    graphqlErrors.map(({ message, location, path }) => {
-      alert(`Graphql Error ${message}.`)
-    })
+const errorLink = onError((err) => {
+  console.log(err)
+  if (err.graphqlErrors) {
+    console.log(err.graphqlErrors);
+    err.graphqlErrors.map(({ message, location, path }) => {
+      alert(`Graphql Error ${message}.`);
+    });
   }
-  if (networkError) {
-    console.log(networkError)
+  if (err.networkError) {
+    console.log(err.networkError);
   }
-})
+});
 
 const link = from([
   errorLink,
-  new HttpLink({ uri: `${API}/graphql` })
-])
+  new HttpLink({
+    uri: `${API}/graphql`,
+    headers: {
+      authorization: JWTStorage.getToken()
+        ? `Bearer ${JWTStorage.getToken()}`
+        : "",
+    },
+  }),
+]);
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link
-})
+  link,
+});
 
-export default client
+export default client;

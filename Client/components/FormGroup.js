@@ -1,10 +1,9 @@
 import { Form } from "react-bootstrap";
 import { inputHandler } from "../app-helper";
 
-const FormGroup = ({ label, name, value, user, setUser }) => {
+const FormGroup = ({ label, name, value, user, setUser, Styles }) => {
   return (
-    <Form.Group>
-      <Form.Label>{label}:</Form.Label>
+    <Form.Group className={Styles.authGroup}>
       <Form.Control
         type={
           label == "Password" || label == "Verify Password"
@@ -13,10 +12,11 @@ const FormGroup = ({ label, name, value, user, setUser }) => {
         }
         name={name}
         value={value}
-        placeholder={`Insert ${label} Here`}
         onChange={(e) => inputHandler(e, user, setUser)}
         required
+        className={Styles.authInput}
       ></Form.Control>
+      <Form.Label className={Styles.authLabel}>{label}:</Form.Label>
     </Form.Group>
   );
 };
